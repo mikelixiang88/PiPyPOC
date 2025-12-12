@@ -1,3 +1,10 @@
+## v0.1.2 2025-12-12
+
+### Changed
+
+- Merge pull request #12 from mikelixiang88/develop
+- adding fix
+
 ## v0.1.1 2025-12-12
 
 ### Changed
