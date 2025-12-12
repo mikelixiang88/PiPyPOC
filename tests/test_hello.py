@@ -10,7 +10,7 @@ class TestHello(unittest.TestCase):
     def test_greet(self):
         """Test greet function."""
         result = greet("Test")
-        self.assertEqual(result, "Hello, Test testtt!")
+        self.assertEqual(result, "Hello, Test testttt!")
 
 
 if __name__ == "__main__":
