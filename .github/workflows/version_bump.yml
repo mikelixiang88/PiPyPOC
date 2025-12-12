@@ -4,7 +4,6 @@ name: Bump Version
 
 permissions:
   contents: write
-  pull-requests: write
   
 on:
   pull_request:
@@ -26,10 +25,10 @@ jobs:
         ref: main
       
     - name: 'Automated Version Bump'
-      id: version-bump
-      uses: 'taj54/universal-version-bump@v0.14.0'
+      uses: 'phips28/gh-action-bump-version@master'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_type: patch
-        commit_directly: true
+        minor-wording: 'add,Adds,new'
+        major-wording: 'MAJOR,cut-major'
+        patch-wording: 'patch,fixes'
