@@ -1,3 +1,12 @@
+## v0.1.4 2025-12-12
+
+### Changed
+
+- Merge pull request #16 from mikelixiang88/version-bump/v0.1.3
+- bump version to v0.1.3
+- Merge pull request #15 from mikelixiang88/develop
+- adding t for test
+
 ## v0.1.3 2025-12-12
 
 ### Changed
