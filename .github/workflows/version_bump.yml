@@ -1,0 +1,33 @@
+# Automatically bump version after PR merge
+
+name: Bump Version
+
+permissions:
+  contents: write
+  
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  bump:
+    if: github.event.pull_request.merged == true
+    name: 'Bump Version on main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 'Checkout source code'
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+        ref: main
+      
+    - name: 'Automated Version Bump'
+      id: version-bump
+      uses: 'taj54/universal-version-bump@v0.14.0'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_type: patch
