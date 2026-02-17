@@ -23,7 +23,7 @@ jobs:
         VERSION=$(grep -E "^version = " pyproject.toml | sed 's/version = "\(.*\)"/\1/')
         echo "version=v$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Get previous tag
+        - name: Get previous tag
       id: prev_tag
       run: |
         PREV_TAG=$(git tag --sort=-v:refname | grep -v "^${{ steps.version.outputs.version }}$" | head -n 1)
@@ -42,11 +42,27 @@ jobs:
           COMMITS=$(git log --pretty=format:"- %s" --no-merges | grep -v "^- Merge pull request" | grep -v "^- Update CHANGELOG")
         fi
         
-        # Create new changelog entry
-        ENTRY="## [$VERSION] - $DATE\n\n### Changed\n$COMMITS\n\n"
+        # Create temporary file with new entry
+        cat > /tmp/changelog_entry.txt << 'EOF'
+        ## [$VERSION] - $DATE
         
-        # Insert after the header (after line 5)
-        sed -i "5a\\$ENTRY" CHANGELOG.md
+        ### Changed
+        $COMMITS
+        
+        EOF
+        
+        # Replace placeholders
+        sed -i "s/\$VERSION/$VERSION/g" /tmp/changelog_entry.txt
+        sed -i "s/\$DATE/$DATE/g" /tmp/changelog_entry.txt
+        echo "$COMMITS" | sed 's/^//' > /tmp/commits.txt
+        sed -i "/### Changed/r /tmp/commits.txt" /tmp/changelog_entry.txt
+        sed -i '/\$COMMITS/d' /tmp/changelog_entry.txt
+        
+        # Insert into CHANGELOG.md after line 5
+        head -n 5 CHANGELOG.md > /tmp/changelog_new.md
+        cat /tmp/changelog_entry.txt >> /tmp/changelog_new.md
+        tail -n +6 CHANGELOG.md >> /tmp/changelog_new.md
+        mv /tmp/changelog_new.md CHANGELOG.md
         
         # Commit and push changelog
         git config user.name "github-actions[bot]"
